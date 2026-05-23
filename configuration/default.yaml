@@ -1,0 +1,12 @@
+base_url: "https://{version}.{component}.api-sports.io"
+api_key: ""
+
+retry:
+  max_retries: 3
+  backoff_factor: 1.0
+  retry_on_status: [429, 502, 503, 504]
+  allowed_methods: ["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "POST", "PATCH"]
+
+validation:
+  allowed_status: [200, 201, 202, 203, 204, 206]
+  response_wait_timeout: 30

@@ -1,0 +1,29 @@
+test_get_countries:
+  - description: "Get all countries"
+    expected:
+      success: true
+      count: 10
+      code: ["GB-ENG", "FR", "ES"]
+
+test_get_country:
+  - description: "Get country by code (GB-ENG)"
+    code: "GB-ENG"
+    expected:
+      success: true
+      code: "GB-ENG"
+      name: "England"
+      flag: "https://media.api-sports.io/flags/gb-eng.svg"
+
+  - description: "Get country by name (England)"
+    name: "England"
+    expected:
+      success: true
+      code: "GB-ENG"
+      name: "England"
+      flag: "https://media.api-sports.io/flags/gb-eng.svg"
+
+  - description: "Get country by search term that is too short"
+    search: "zz"
+    expected:
+      success: false
+      message: "The Search field must be at least 3 characters in length."

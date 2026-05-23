@@ -1,0 +1,29 @@
+test_get_countries:
+  - description: "Get all countries"
+    expected:
+      success: true
+      count: 10
+      code: ["TW", "AU", "US"]
+
+test_get_country:
+  - description: "Get country by code (TW)"
+    code: "TW"
+    expected:
+      success: true
+      code: "TW"
+      name: "Taiwan"
+      flag: "https://media.api-sports.io/flags/tw.svg"
+
+  - description: "Get country by name (Taiwan)"
+    name: "Taiwan"
+    expected:
+      success: true
+      code: "TW"
+      name: "Taiwan"
+      flag: "https://media.api-sports.io/flags/tw.svg"
+
+  - description: "Get country by search term that is too short"
+    search: "zz"
+    expected:
+      success: false
+      message: "The Search field must be at least 3 characters in length."

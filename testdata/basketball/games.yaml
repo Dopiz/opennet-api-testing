@@ -1,0 +1,25 @@
+test_get_games:
+  - description: "Get games by league and season (NBA, 12, 2023-2024)"
+    league: 12
+    season: "2023-2024"
+    expected:
+      success: true
+      results: 1377
+    
+  - description: "Get games by league and season — paid-only season (NBA, 12, 2013-2014)"
+    league: 12
+    season: "2013-2014"
+    expected:
+      success: false
+      message: "Free plans do not have access to this season, try from 2022 to 2024."
+
+test_get_games_statistics_players:
+  - description: "Get player statistics by game id (23-24 NBA Finals, 400924)"
+    id: 400924
+    expected:
+      success: true
+      name: "Tatum Jayson"
+      points: 31
+      assists: 11
+      rebounds: 8
+
