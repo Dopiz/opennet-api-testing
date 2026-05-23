@@ -1,0 +1,19 @@
+test_get_leagues:
+  - description: "Get leagues by country code (TW)"
+    code: "TW"
+    expected:
+      success: true
+      count: 3
+      leagues: ["P. League+", "SBL", "T1 League"]
+
+test_get_league:
+  - description: "Get league by id and season (NBA, 12, 2023-2024)"
+    id: 12
+    season: "2023-2024"
+    expected:
+      success: true
+      count: 1
+      name: "NBA"
+      country: "USA"
+      start: "2023-10-05"
+      end: "2024-06-18"

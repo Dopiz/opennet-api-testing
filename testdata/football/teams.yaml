@@ -1,0 +1,23 @@
+test_get_teams:
+  - description: "Get teams by league and season (Premier League, 39, 2023)"
+    league: 39
+    season: 2023
+    expected:
+      success: true
+      count: 20
+      teams: ["Manchester United", "Manchester City"]
+
+  - description: "Get teams with no parameters (API requires at least one)"
+    expected:
+      success: false
+      message: "At least one parameter is required."
+
+test_get_team_statistics:
+  - description: "Get team statistics (Manchester United, league 39, 2023)"
+    league: 39
+    season: 2023
+    team: 33
+    expected:
+      success: true
+      name: "Manchester United"
+      form: "WLWLLWLWWLWWWLWLDLWLDWWWWLLWDLDDWDLLWW"

@@ -1,0 +1,5 @@
+base_url: "https://staging.{component}.api-sports.io"
+
+validation:
+  allowed_status: [200, 301, 400]
+  response_wait_timeout: 10
