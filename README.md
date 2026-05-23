@@ -30,7 +30,6 @@ Tests are data-driven: one YAML file per endpoint group, **one key per test func
 | `test_get_teams`           | Get teams with no parameters                                | ❌ errors (≥1 param required)                          |
 | `test_get_team_statistics` | Get team statistics (Man Utd, `39`, `2023`)                 | ✅ team name + form string                             |
 
-
 ### Basketball (`-m basketball`) — `v1.basketball.api-sports.io`
 
 | Test                                | Case                                                  | Expected                                |
@@ -51,7 +50,7 @@ api-sports replies **HTTP 200 even on failure**, so the real outcome lives in th
 
 ### 1. Per-field request validation
 
-Exercise each request param / body field with correct values, empty values, invalid values, and edge cases. *(demo: country code too short, teams with no params, paid-only season)*
+Exercise each request param / body field with correct values, empty values, invalid values, and edge cases. *(example: country code too short, teams with no params, paid-only season)*
 
 ### 2. Business-scenario values
 
@@ -59,13 +58,14 @@ Substitute different values to fit specific business logic or user scenarios —
 
 ### 3. Response-field correctness
 
-Assert returned fields match expectations. This can extend to checking the **value persisted in the database** for consistency, or even calling a **third-party service / AI comparison** to verify. *(demo: asserts `errors`, `results` count, specific fields in the test body)*
+Assert returned fields match expectations. This can extend to checking the **value persisted in the database** for consistency, or even calling a **third-party service / AI comparison** to verify. *(example: asserts `errors`, `results` count, specific fields in the test body)*
 
 ### 4. Status code & response time (and schema) via injected hooks
 
-Validate every response's **status code** and **response time** (a performance guard — in some contexts bad performance is itself a bug), and potentially the **response schema** against the OpenAPI doc. *(demo: `StatusValidator` + `ResponseTimeValidator`, injected in `conftest.py`, with a per-call override via `Expect`)*
+Validate every response's **status code** and **response time** (a performance guard — in some contexts bad performance is itself a bug), and potentially the **response schema** against the OpenAPI doc. *(example: `StatusValidator` + `ResponseTimeValidator`, injected in `conftest.py`, with a per-call override via `Expect`)*
 
 ```python
+# Example
 football_api.get_country(code="TW", expect=Expect(status=200, max_time=0.3))
 ```
 
@@ -73,12 +73,7 @@ football_api.get_country(code="TW", expect=Expect(status=200, max_time=0.3))
 
 Design cases by input class (one representative per class) to cut run time without losing coverage.
 
----
-
-**Why this design.** Validators are **injected** in `conftest.py`, not baked into the client, so the API library stays reusable (another consumer gets raw responses without test assertions) and baseline checks (status, latency) are applied to every request (DRY) instead of being repeated in each test. The checks not shown here — DB consistency, schema, third-party / AI comparison — are left out only because of the demo's scale; each slots into the existing framework as **one more validator hook**, without changing the client or existing tests.
-
 ## Tech Stack
-
 
 | Tool                                                     | Version | Purpose                                           |
 | -------------------------------------------------------- | ------- | ------------------------------------------------- |
@@ -90,7 +85,6 @@ Design cases by input class (one representative per class) to cut run time witho
 | [python-dateutil](https://dateutil.readthedocs.io/)      | 2.9.0   | Date parsing/handling in `utils/time.py`          |
 | [PyYAML](https://pyyaml.org/)                            | 6.0.3   | Config & test-data loading                        |
 | [Ruff](https://github.com/astral-sh/ruff)                | 0.15.14 | Linter & formatter                                |
-
 
 ## Project Structure
 
@@ -161,12 +155,10 @@ uv run pytest -m basketball   # only basketball
 
 ## Test Options
 
-
 | Option        | Default   | Description                                                                 |
 | ------------- | --------- | --------------------------------------------------------------------------- |
 | `--env`       | `default` | Config environment merged from `configuration/` (e.g. `default`, `staging`) |
 | `-m <marker>` | —         | Run a sport group: `football` / `basketball`   |
-
 
 ```bash
 # Staging environment
@@ -215,6 +207,8 @@ Each project subclasses it to inject its own behavior before / after a request, 
 - `StatusValidator` and `ResponseTimeValidator` checks the response status and duration in `after_response`.
 
 `CompositeRequestHook` stacks several hooks, running each in turn, so a suite can combine multiple hooks at once.
+
+> **Why this design?** Validators are **injected** in `conftest.py`, not baked into the client, so the API library stays reusable (other project gets raw responses without test assertions) and baseline checks (status, latency) are applied to every request instead of being repeated in each test.
 
 ### Data-driven tests
 
